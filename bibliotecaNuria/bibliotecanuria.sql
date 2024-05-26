@@ -1,34 +1,32 @@
 CREATE DATABASE bibliotecanuria;
 USE bibliotecanuria;
+
 CREATE TABLE Usuario (
 	id_Usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre_Usuario VARCHAR(250) NOT NULL,
     rol VARCHAR (50) NOT NULL
 );
-INSERT INTO Usuario (nombre_Usuario, rol)
-VALUES
-('Núria Marzo', 'usuario'),
-('Maya Moliner', 'usuario');
-
-select * from Usuario; 
 
 CREATE TABLE MiembroPremium (
 	id_MP INT AUTO_INCREMENT PRIMARY KEY,
     nombre_MP VARCHAR(250) NOT NULL,
     rol VARCHAR (50) NOT NULL
 );
+
 CREATE TABLE Autor (
 	id_Autor INT AUTO_INCREMENT PRIMARY KEY,
     nombre_Autor VARCHAR(250) NOT NULL,
     anoNacimiento INT NOT NULL,
     anoMuerte INT
 );
+
 CREATE TABLE Libro (
 	id_Libro INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(250) NOT NULL,
     autor VARCHAR(250) NOT NULL,
     disponibilidad BOOLEAN NOT NULL DEFAULT TRUE
 );
+
 CREATE TABLE Autor_Libro ( -- AUTOR HAS LIBROS
 	id_Autor INT,
     nombre_Autor VARCHAR(250),
@@ -38,6 +36,7 @@ CREATE TABLE Autor_Libro ( -- AUTOR HAS LIBROS
     FOREIGN KEY (id_Autor) REFERENCES Autor(id_Autor),
     FOREIGN KEY (id_Libro) REFERENCES Libro(id_Libro)
 );
+
 CREATE TABLE Usuario_LibrosPrestados ( -- USUARIO HAS LIBROS PRESTADOS
 	id_Usuario INT,
     nombre_Usuario VARCHAR(250),
@@ -47,6 +46,7 @@ CREATE TABLE Usuario_LibrosPrestados ( -- USUARIO HAS LIBROS PRESTADOS
     FOREIGN KEY (id_Usuario) REFERENCES Usuario(id_Usuario),
     FOREIGN KEY (id_Libro) REFERENCES Libro(id_Libro)
 );
+
 CREATE TABLE MP_LibrosPrestados ( -- MIEMBRO PREMIUM HAS LIBROS PRESTADOS
 	id_MP INT,
     nombre_MP VARCHAR(250),
@@ -56,6 +56,7 @@ CREATE TABLE MP_LibrosPrestados ( -- MIEMBRO PREMIUM HAS LIBROS PRESTADOS
     FOREIGN KEY (id_MP) REFERENCES MiembroPremium(id_MP),
     FOREIGN KEY (id_Libro) REFERENCES Libro(id_Libro)
 );
+
 CREATE TABLE MP_LibrosReservados ( -- MIEMBRO PREMIUM HAS LIBROS RESERVADOS
 	id_MP INT,
     nombre_MP VARCHAR(250),
@@ -66,21 +67,27 @@ CREATE TABLE MP_LibrosReservados ( -- MIEMBRO PREMIUM HAS LIBROS RESERVADOS
     FOREIGN KEY (id_Libro) REFERENCES Libro(id_Libro)
 );
 COMMIT;
-/*INSERT INTO Usuario (nombre_Usuario, rol)
+
+-- INSERTS EN LAS TABLAS:
+
+INSERT INTO Usuario (nombre_Usuario, rol)
 VALUES
 ('Núria Marzo', 'usuario'),
-('Maya Moliner', 'usuario');*/
+('Maya Moliner', 'usuario');
+
 INSERT INTO MiembroPremium (nombre_MP, rol)
 VALUES
 ('Àlex Ramos', 'miembro premium'),
 ('Toni Usón', 'miembro premium'),
 ('Dolors Lluen','miembro premium');
+
 INSERT INTO Autor (nombre_Autor, anoNacimiento, anoMuerte)
 VALUES
 ('Santiago Posteguillo', 1967, NULL),
 ('Brandon Sanderson', 1975, NULL),
 ('Carlos Ruiz Zafón', 1964, 2020),
 ('Ken Follett', 1949, NULL);
+
 INSERT INTO Libro (titulo, autor, disponibilidad)
 VALUES
 ('Yo, Julia', 'Santiago Posteguillo', TRUE),
@@ -91,7 +98,9 @@ VALUES
 ('Marina', 'Carlos Ruiz Zafón', TRUE),
 ('Los Pilares de la tierra', 'Ken Follett', TRUE),
 ('La Caída de los Gigantes', 'Ken Follett', TRUE);
+
 -- CONSULTAR TABLAS --
+
 	-- Consultar todos los elementos de cada tabla --
 		SELECT * FROM Usuario;
 		SELECT * FROM MiembroPremium;
@@ -103,34 +112,78 @@ VALUES
         FROM Libro l
         INNER JOIN Autor a ON l.autor = a.nombre_autor
         ORDER BY a.id_Autor ASC;
-		-- Santiago Posteguillo --
+		
+        -- Santiago Posteguillo --
+			-- Tabla Autor y sus libros
 		SELECT a.id_Autor, a.nombre_Autor AS autor, l.id_Libro, l.titulo
         FROM Autor a
         INNER JOIN Libro l ON a.nombre_Autor = l.autor
         WHERE a.nombre_Autor LIKE 'Santiago Posteguillo';
+        
+			-- Tabla Disponibilidad libros
         SELECT l.id_Libro, l.titulo, l.disponibilidad FROM Libro l
         INNER JOIN Autor a ON l.autor = a.nombre_Autor
         WHERE a.nombre_Autor LIKE 'Santiago Posteguillo';
 		
         -- Brandon Sanderson--
+        -- Tabla Autor y sus libros
         SELECT a.id_Autor, a.nombre_Autor AS autor, l.id_Libro, l.titulo
         FROM Autor a
         INNER JOIN Libro l ON a.nombre_Autor = l.autor
         WHERE a.nombre_Autor LIKE 'Brandon Sanderson';
+        
+        -- Tabla Disponibilidad libros
+        SELECT l.id_Libro, l.titulo, l.disponibilidad FROM Libro l
+        INNER JOIN Autor a ON l.autor = a.nombre_Autor
+        WHERE a.nombre_Autor LIKE 'Brandon Sanderson';
+        
         -- Carlos Ruiz Zafón--
+        -- Tabla Autor y sus libros
         SELECT a.id_Autor, a.nombre_Autor AS autor, l.id_Libro, l.titulo
         FROM Autor a
         INNER JOIN Libro l ON a.nombre_Autor = l.autor
         WHERE a.nombre_Autor LIKE 'Carlos Ruiz Zafón';
+        
+               -- Tabla Disponibilidad libros
+        SELECT l.id_Libro, l.titulo, l.disponibilidad FROM Libro l
+        INNER JOIN Autor a ON l.autor = a.nombre_Autor
+        WHERE a.nombre_Autor LIKE 'Carlos Ruiz Zafón';
+        
         -- Ken Follett--
+        -- Tabla Autor y sus libros
         SELECT a.id_Autor, a.nombre_Autor AS autor, l.id_Libro, l.titulo
         FROM Autor a
         INNER JOIN Libro l ON a.nombre_Autor = l.autor
         WHERE a.nombre_Autor LIKE 'Ken Follett';
-	-- Libros Prestados --
+        
+               -- Tabla Disponibilidad libros
+        SELECT l.id_Libro, l.titulo, l.disponibilidad FROM Libro l
+        INNER JOIN Autor a ON l.autor = a.nombre_Autor
+        WHERE a.nombre_Autor LIKE 'Ken Follett';
+        
+             -- Mercè Rodoreda--
+             -- Tabla Autor y sus libros
+        SELECT a.id_Autor, a.nombre_Autor AS autor, l.id_Libro, l.titulo
+        FROM Autor a
+        INNER JOIN Libro l ON a.nombre_Autor = l.autor
+        WHERE a.nombre_Autor LIKE 'Mercè Rodoreda';
+        
+               -- Tabla Disponibilidad libros
+        SELECT l.id_Libro, l.titulo, l.disponibilidad FROM Libro l
+        INNER JOIN Autor a ON l.autor = a.nombre_Autor
+        WHERE a.nombre_Autor LIKE 'Mercè Rodoreda';
+	
+    -- Libros Prestados --
 		SELECT id_Libro, titulo
         FROM Libro
         WHERE disponibilidad = FALSE;
+        
+	-- Lista libros prestados por miembros premium --
+        SELECT * FROM MP_LibrosPrestados;
+        
+	-- Libros Reservados Miembros Premium --
+		SELECT * FROM MP_LibrosReservados;
+        
 	-- Lista libros prestados por usuarios(usuarios normales) --
         SELECT * FROM Usuario_LibrosPrestados;
         DELETE FROM usuario_librosprestados WHERE titulo LIKE 'mac';
@@ -138,10 +191,10 @@ VALUES
         SELECT u.id_Usuario, u.nombre_Usuario, l.id_Libro, l.titulo
         FROM Usuario u , Libro l
         WHERE u.id_Usuario = 50 and l.id_Libro = 100;
-	-- Lista libros prestados por miembros premium --
-        SELECT * FROM MP_LibrosPrestados;
-	-- Libros Reservados --
-		SELECT * FROM MP_LibrosReservados;
+	
+
+	
+
 SELECT l.titulo, l.disponibilidad
 FROM Libro l
 INNER JOIN Usuario_LibrosPrestados ulp ON l.titulo = ulp.titulo
